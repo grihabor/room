@@ -1,0 +1,8 @@
+version: "2"
+services: 
+  main: 
+    build: .
+    volumes:
+      - ./data:/project/data
+      - ./src:/project/src
+    

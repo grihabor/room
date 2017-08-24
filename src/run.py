@@ -9,7 +9,7 @@ def main():
         measurements = json.load(f)
     
     room = svgwrite.Drawing('room.svg')
-	room.add()    
+	room.add    
     
     
 if __name__ == '__main__':
