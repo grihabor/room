@@ -1,4 +1,5 @@
 import os
+from operator import attrgetter
 from pprint import pprint
 
 import svgwrite
@@ -19,25 +20,37 @@ class Coord:
         self.x = x
         self.y = y
 
+    def __add__(self, other):
+        return Coord(self.x + other.x,
+                     self.y + other.y)
 
-def get_start(path):
-    arr = Coord([0], [0])
+    def __repr__(self):
+        return '({0.x}, {0.y})'.format(self)
+
+
+def rel_to_abs(path):
+    """Convert relative coordinates to absolute"""
+    arr = [Coord(0, 0)]
 
     for point in path:
-        x, y = point['rel']
-        arr.x.append(arr.x[-1] + x)
-        arr.y.append(arr.y[-1] + y)
+        rel = Coord(*point['rel'])
+        arr.append(arr[-1] + rel)
 
-    pprint(list(zip(arr.x, arr.y)))
-
-    return -min(arr.x), -min(arr.y)
+    pprint(arr)
+    return arr
 
 
 def create_walls(walls):
+    abs_coords = rel_to_abs(walls)
+    start = Coord(-min(abs_coords, key=attrgetter('x')).x,
+                  -min(abs_coords, key=attrgetter('y')).y)
+
     path = Path()
-    path.push('M', get_start(walls))
-    for coords in walls:
-        path.push('l', *coords)
+    path.push('M', start.x, start.y)
+    for coords in abs_coords:
+        path.push('L',
+                  start.x + coords.x,
+                  start.y + coords.y)
     return path
 
 
