@@ -36,14 +36,10 @@ def main():
     with open(FILE_MEASUREMENTS) as f:
         measurements = json.load(f)
 
-    with open(FILE_MEASUREMENTS, 'w') as f:
-        measurements = [coords['coords'] for coords in measurements['path']]
-        json.dump(measurements, f, indent=4)
-
     room = svgwrite.Drawing(FILE_DRAWING)
     path = Path()
-    path.push('M', get_start(measurements))
-    for coords in measurements:
+    path.push('M', get_start(measurements['walls']))
+    for coords in measurements['walls']:
         path.push('l', *coords)
     room.add(path)
     room.save(pretty=True)
