@@ -23,7 +23,8 @@ class Coord:
 def get_start(path):
     arr = Coord([0], [0])
 
-    for x, y in path:
+    for point in path:
+        x, y = point['rel']
         arr.x.append(arr.x[-1] + x)
         arr.y.append(arr.y[-1] + y)
 
