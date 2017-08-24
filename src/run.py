@@ -32,16 +32,20 @@ def get_start(path):
     return -min(arr.x), -min(arr.y)
 
 
+def create_walls(walls):
+    path = Path()
+    path.push('M', get_start(walls))
+    for coords in walls:
+        path.push('l', *coords)
+    return path
+
+
 def main():
     with open(FILE_MEASUREMENTS) as f:
         measurements = json.load(f)
 
     room = svgwrite.Drawing(FILE_DRAWING)
-    path = Path()
-    path.push('M', get_start(measurements['walls']))
-    for coords in measurements['walls']:
-        path.push('l', *coords)
-    room.add(path)
+    room.add(create_walls(measurements['walls']))
     room.save(pretty=True)
 
     
