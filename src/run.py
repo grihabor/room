@@ -71,12 +71,18 @@ def create_doors(doors, walls):
             door_coords[name_id].append(point)
 
     lines = []
+
+    extra = {
+        'stroke': 'red',
+        'stroke-width': 3
+    }
+
     for door_id, door_pair in door_coords.items():
         assert len(door_pair) == 2
         print('Create door {}'.format(door_id))
         start = door_pair[0].x, door_pair[0].y
         end = door_pair[1].x, door_pair[1].y
-        lines.append(Line(start, end))
+        lines.append(Line(start, end, **extra))
 
     return lines
 
@@ -89,6 +95,8 @@ def main():
 
     start = Coord(-min(walls_abs, key=attrgetter('x')).x,
                   -min(walls_abs, key=attrgetter('y')).y)
+
+    start += Coord(10, 10)
 
     walls_abs = [coords + start for coords in walls_abs]
 
